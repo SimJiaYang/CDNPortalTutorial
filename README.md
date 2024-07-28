@@ -1,4 +1,3 @@
-Markdown
 # CDNPortalTutorial
 
 This repository contains the code for a RESTful API built using ASP.NET Core Web API that manages a list of users for a fictional company, CDN (Complete Developer Network). The API provides functionalities for CRUD operations (Create, Read, Update, Delete) on user data.
@@ -20,7 +19,7 @@ The code is located in the CDNPortalTutorial project. Key functionalities are wi
     * `POST /api/v1/users`: Creates a new user.
     * `PUT /api/v1/users/{id}`: Updates an existing user.
     * `DELETE /api/v1/users/{id}`: Deletes a user.
-* **Database Interaction:** (For assessment, an in-memory database is used with ApplicationDbContext). In a real-world scenario, you would configure a connection to a preferred RDBMS like SQL Server, MySQL, etc.
+* **Database Interaction:**: MySQL Server Express
 * **Error Handling:** Each API endpoint includes a try-catch block to handle potential exceptions and return appropriate error responses.
 
 ## Running the Project
@@ -37,4 +36,4 @@ This project addresses the required functionalities:
 
 * **RESTful API for CRUD operations:** The UserController provides endpoints for GET, POST, PUT, and DELETE requests to manage users.
 * **User model attributes:** The User class defines all required attributes.
-* **Database connection:** The code demonstrates connection to a database (in-memory for assessment).
+* **Database connection:** The code demonstrates connection to a database.

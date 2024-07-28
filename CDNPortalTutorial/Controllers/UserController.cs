@@ -95,7 +95,7 @@ namespace CDNPortalTutorial.Controllers
         }
 
         [HttpPut]
-        [Route("{id:guid}")]
+        [Route("{id:Guid}")]
         public IActionResult UpdateUser(Guid id, UpdateUserDto data)
         {
             try
@@ -127,6 +127,7 @@ namespace CDNPortalTutorial.Controllers
         }
 
         [HttpDelete]
+        [Route("{id:Guid}")]
         public IActionResult DeleteUser(Guid id) {
             try
             {

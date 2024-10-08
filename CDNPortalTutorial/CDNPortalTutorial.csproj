@@ -24,7 +24,6 @@
     <Folder Include="Features\Users\Commands\DeleteUser\" />
     <Folder Include="Features\Users\Commands\UpdateUser\" />
     <Folder Include="Features\Users\Queries\GetAllUser\" />
-    <Folder Include="Features\Users\Queries\GetUserById\" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
 ﻿using CDNPortalTutorial.Data;
+using CDNPortalTutorial.Exceptions;
 using CDNPortalTutorial.Model.Dto;
 using CDNPortalTutorial.Model.Entities;
 using CDNPortalTutorial.Services.ServiceImplement;
@@ -28,7 +29,7 @@ namespace CDNPortalTutorial.Services
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Error retrieving data from the database", ex);
+                throw new BaseException("Error retrieving data from the database: " + ex);
             }
         }
 
@@ -41,7 +42,7 @@ namespace CDNPortalTutorial.Services
 
                 if (user == null)
                 {
-                    throw new KeyNotFoundException($"User with ID {id} was not found.");
+                    throw new UserNotFoundException(id);
                 }
 
                 return user;
@@ -52,7 +53,7 @@ namespace CDNPortalTutorial.Services
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Error retrieving user from the database.", ex);
+                throw new BaseException("Error retrieving data from the database: " + ex);
             }
         }
 
@@ -91,7 +92,6 @@ namespace CDNPortalTutorial.Services
             }
             catch (Exception ex)
             {
-                // You can log the exception here for debugging purposes
                 throw new InvalidOperationException("Error occurred while creating the user.", ex);
             }
         }
@@ -107,7 +107,7 @@ namespace CDNPortalTutorial.Services
                 // Handle case where the user is not found
                 if (user == null)
                 {
-                    throw new KeyNotFoundException($"User with ID {id} was not found.");
+                    throw new UserNotFoundException(id);
                 }
 
                 // Update the user's properties with new data
@@ -145,7 +145,7 @@ namespace CDNPortalTutorial.Services
                 // Check if the user was found
                 if (user == null)
                 {
-                    throw new KeyNotFoundException($"User with ID {id} was not found.");
+                    throw new UserNotFoundException(id);
                 }
 
                 // Remove the user

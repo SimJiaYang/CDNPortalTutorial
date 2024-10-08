@@ -3,6 +3,9 @@ using CDNPortalTutorial.Services.ServiceImplement;
 using CDNPortalTutorial.Services;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using Microsoft.AspNetCore.Diagnostics;
+using System.Net;
+using CDNPortalTutorial.Middleware;
 
 // Create Logger Information
 Log.Logger = new LoggerConfiguration()
@@ -50,6 +53,28 @@ try
         app.UseSwagger();
         app.UseSwaggerUI();
     }
+
+    // Configure SeriLog
+    app.UseSerilogRequestLogging();
+
+    // Exception Handler
+    app.UseExceptionHandler(options =>
+    {
+        options.Run(async context =>
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            context.Response.ContentType = "application/json";
+            var exception = context.Features.Get<IExceptionHandlerFeature>();
+            if (exception != null)
+            {
+                var message = $"{exception.Error.Message}";
+                await context.Response.WriteAsync(message).ConfigureAwait(false);
+            }
+        });
+    });
+
+    // Use Middleware
+    app.UseMiddleware<ErrorHandlerMiddleware>();
 
     app.UseHttpsRedirection();
 

@@ -8,8 +8,7 @@ using System.Net;
 using CDNPortalTutorial.Middleware;
 using FluentValidation;
 using System.Reflection;
-using CDNPortalTutorial.Model.Dto;
-using CDNPortalTutorial.Validators;
+using CDNPortalTutorial.Behaviors;
 
 // Create Logger Information
 Log.Logger = new LoggerConfiguration()
@@ -50,10 +49,16 @@ try
     builder.Services.AddTransient<IUserService, UserService>();
 
     // Add Validator
-    builder.Services.AddScoped<IValidator<UpdateUserDto>, UpdateUserValidator>();
+    //builder.Services.AddScoped<IValidator<UpdateUserDto>, UpdateUserValidator>();
+    builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
-    // Register MediatR
-    builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+    // Add MediatR
+    builder.Services.AddMediatR(cfg =>
+    {
+        cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+        cfg.AddOpenBehavior(typeof(RequestResponseLoggingBehavior<,>));
+        cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+    });
 
     var app = builder.Build();
 

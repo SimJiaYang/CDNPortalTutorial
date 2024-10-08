@@ -1,7 +1,9 @@
-﻿using CDNPortalTutorial.Data;
+﻿using Azure.Core;
+using CDNPortalTutorial.Data;
 using CDNPortalTutorial.Model.Dto;
 using CDNPortalTutorial.Model.Entities;
 using CDNPortalTutorial.Services;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -13,10 +15,13 @@ namespace CDNPortalTutorial.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
+        private readonly IValidator<UpdateUserDto> _updateUserValidator;
 
-        public UserController(UserService userService)
+        public UserController(UserService userService,
+            IValidator<UpdateUserDto> updateUserValidator)
         {
             _userService = userService;
+            _updateUserValidator = updateUserValidator;
         }
 
         [HttpGet]
@@ -46,6 +51,13 @@ namespace CDNPortalTutorial.Controllers
         [Route("{id:Guid}")]
         public async Task<IActionResult> UpdateUser(Guid id, UpdateUserDto data)
         {
+            // Validate the incoming request
+            var validationResult = await _updateUserValidator.ValidateAsync(data);
+            // Show error
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.ToDictionary());
+            }
             var user = await _userService.UpdateUserAsync(id, data);
             return Ok(user);
         }

@@ -6,6 +6,10 @@ using Serilog;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Net;
 using CDNPortalTutorial.Middleware;
+using FluentValidation;
+using System.Reflection;
+using CDNPortalTutorial.Model.Dto;
+using CDNPortalTutorial.Validators;
 
 // Create Logger Information
 Log.Logger = new LoggerConfiguration()
@@ -44,6 +48,9 @@ try
 
     // Add Service with it's interface
     builder.Services.AddTransient<IUserService, UserService>();
+
+    // Add Validator
+    builder.Services.AddScoped<IValidator<UpdateUserDto>, UpdateUserValidator>();
 
     var app = builder.Build();
 

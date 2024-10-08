@@ -111,7 +111,7 @@ namespace CDNPortalTutorial.Services
                 }
 
                 // Update the user's properties with new data
-                user.Name = data.Name;
+                user.Name = data.Name ?? "User";
                 user.UserName = data.UserName;
                 user.Email = data.Email;
                 user.PhoneNumber = data.PhoneNumber;

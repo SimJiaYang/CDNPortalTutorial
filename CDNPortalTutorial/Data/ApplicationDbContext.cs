@@ -8,7 +8,7 @@ namespace CDNPortalTutorial.Data
         // CTOR
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-
+            //Database.EnsureCreated();
         }
 
         //Add-Migration "Initiall Migration"

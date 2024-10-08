@@ -52,6 +52,9 @@ try
     // Add Validator
     builder.Services.AddScoped<IValidator<UpdateUserDto>, UpdateUserValidator>();
 
+    // Register MediatR
+    builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.

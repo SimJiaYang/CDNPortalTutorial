@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using CDNPortalTutorial.Data;
+using CDNPortalTutorial.Features.Users.Commands.CreateUser;
 using CDNPortalTutorial.Model.Dto;
 using CDNPortalTutorial.Model.Entities;
 using CDNPortalTutorial.Services;
@@ -41,7 +42,7 @@ namespace CDNPortalTutorial.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser(AddUserDto data)
+        public async Task<IActionResult> CreateUser(CreateUserCommand data)
         {
            var createdUser = await _userService.CreateUserAsync(data);
            return Ok(createdUser);

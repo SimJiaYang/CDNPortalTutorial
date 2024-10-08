@@ -1,8 +1,10 @@
 ﻿using CDNPortalTutorial.Data;
 using CDNPortalTutorial.Exceptions;
+using CDNPortalTutorial.Features.Users.Commands.CreateUser;
 using CDNPortalTutorial.Model.Dto;
 using CDNPortalTutorial.Model.Entities;
 using CDNPortalTutorial.Services.ServiceImplement;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace CDNPortalTutorial.Services
@@ -12,11 +14,13 @@ namespace CDNPortalTutorial.Services
 
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<UserService> _logger;
+        private readonly ISender _sender;
 
-        public UserService(ApplicationDbContext dbContext, ILogger<UserService> logger)
+        public UserService(ApplicationDbContext dbContext, ILogger<UserService> logger, ISender sender)
         {
             this._dbContext = dbContext;
             this._logger = logger;
+            _sender = sender;
         }
 
         public async Task<List<User>> GetUsersAsync()
@@ -57,43 +61,10 @@ namespace CDNPortalTutorial.Services
             }
         }
 
-        public async Task<User> CreateUserAsync(AddUserDto data)
+        public async Task<User> CreateUserAsync(CreateUserCommand command)
         {
-            _logger.LogInformation("Validate User");
-            if (data == null)
-            {
-                throw new ArgumentNullException(nameof(data), "User data cannot be null");
-            }
-
-            // Check if the email already exists
-            var emailExists = await _dbContext.Users.AnyAsync(x => x.Email == data.Email);
-            if (emailExists)
-            {
-                throw new InvalidOperationException("Email already exists. Please use a different email.");
-            }
-
-            var user = new User
-            {
-                Name = data.Name,
-                UserName = data.UserName,
-                Email = data.Email,
-                PhoneNumber = data.PhoneNumber,
-                Skillsets = data.Skillsets,
-                Hobby = data.Hobby
-            };
-
-            _logger.LogInformation("Create User");
-            try
-            {
-                var createdUser = await _dbContext.Users.AddAsync(user);
-                await _dbContext.SaveChangesAsync();
-
-                return createdUser.Entity;
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException("Error occurred while creating the user.", ex);
-            }
+            var user = await _sender.Send(command);
+            return user;
         }
 
         public async Task<User> UpdateUserAsync(Guid id, UpdateUserDto data)

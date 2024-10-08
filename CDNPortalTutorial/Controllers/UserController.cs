@@ -30,7 +30,7 @@ namespace CDNPortalTutorial.Controllers
         [Route("{id:guid}")]
         public async Task<IActionResult> GetEmployee(Guid id)
         {
-            var user = await _userService.GetEmployeeAsync(id);
+            var user = await _userService.GetUserAsync(id);
 
             return Ok(user);
         }

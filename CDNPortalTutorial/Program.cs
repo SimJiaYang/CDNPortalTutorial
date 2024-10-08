@@ -39,6 +39,9 @@ try
     // Add Service
     builder.Services.AddScoped<UserService>();
 
+    // Add Service with it's interface
+    builder.Services.AddTransient<IUserService, UserService>();
+
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.

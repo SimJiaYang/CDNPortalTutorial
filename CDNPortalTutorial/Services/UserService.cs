@@ -10,14 +10,17 @@ namespace CDNPortalTutorial.Services
     {
 
         private readonly ApplicationDbContext _dbContext;
+        private readonly ILogger<UserService> _logger;
 
-        public UserService(ApplicationDbContext dbContext)
+        public UserService(ApplicationDbContext dbContext, ILogger<UserService> logger)
         {
             this._dbContext = dbContext;
+            this._logger = logger;
         }
 
         public async Task<List<User>> GetUsersAsync()
         {
+            _logger.LogInformation("Get Users List");
             try
             {
                 List<User> users = await _dbContext.Users.ToListAsync();
@@ -29,8 +32,9 @@ namespace CDNPortalTutorial.Services
             }
         }
 
-        public async Task<User> GetEmployeeAsync(Guid id)
+        public async Task<User> GetUserAsync(Guid id)
         {
+            _logger.LogInformation("Get User Information by ID");
             try
             {
                 var user = await _dbContext.Users.FindAsync(id);
@@ -54,6 +58,7 @@ namespace CDNPortalTutorial.Services
 
         public async Task<User> CreateUserAsync(AddUserDto data)
         {
+            _logger.LogInformation("Validate User");
             if (data == null)
             {
                 throw new ArgumentNullException(nameof(data), "User data cannot be null");
@@ -76,6 +81,7 @@ namespace CDNPortalTutorial.Services
                 Hobby = data.Hobby
             };
 
+            _logger.LogInformation("Create User");
             try
             {
                 var createdUser = await _dbContext.Users.AddAsync(user);
@@ -92,6 +98,7 @@ namespace CDNPortalTutorial.Services
 
         public async Task<User> UpdateUserAsync(Guid id, UpdateUserDto data)
         {
+            _logger.LogInformation("Update User Information");
             try
             {
                 // Find the user by ID asynchronously
@@ -129,6 +136,7 @@ namespace CDNPortalTutorial.Services
 
         public async Task DeleteUserAsync(Guid id)
         {
+            _logger.LogInformation("Delete User");
             try
             {
                 // Find the user by ID
